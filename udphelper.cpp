@@ -18,16 +18,16 @@ udpHelper::udpHelper()
     memset(bufferSize, 0, 20);
     bufferTail = 0;
 }
-//udpHelper::~udpHelper()
-//{
-//    for (int i =0; i<20; i++) {
-//        if (buffer[i]!=NULL)
-//        {
+udpHelper::~udpHelper()
+{
+    for (int i =0; i<20; i++) {
+        if (buffer[i]!=NULL)
+        {
 //            free(buffer[i]);//??
-//            buffer[i] = NULL;
-//        }
-//    }
-//}
+            buffer[i] = NULL;
+        }
+    }
+}
 int udpHelper::Close()
 {
     success = false;
@@ -58,7 +58,7 @@ int udpHelper::Connect(unsigned char* ip,int port)
         sprintf(str_ip,"%s", ip);
         success = true;
         addr.sin_addr.s_addr = inet_addr(str_ip);
-//        int result = ::connect(socket_t, (struct sockaddr *)&addr, sizeof(addr));
+        int result = ::connect(socket_t, (struct sockaddr *)&addr, sizeof(addr));
 //        bind(socket_t, (struct sockaddr*)&addr, sizeof(addr));
 //        printf(" connect to server %s:%d success\n",ip,port);
         receiv = std::thread(&udpHelper::receive,this);
@@ -96,6 +96,7 @@ void udpHelper::receive()
             break;
             
         }
+        usleep(100);
     }
     socket_t = -1;
     
